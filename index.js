@@ -1,4 +1,4 @@
-require('dotenv').config()
+require("dotenv").config();
 const { Configuration, OpenAIApi } = require("openai");
 const { getImage, getChat } = require("./Helper/functions");
 const { Telegraf } = require("telegraf");
@@ -10,22 +10,23 @@ const openai = new OpenAIApi(configuration);
 module.exports = openai;
 
 const bot = new Telegraf(process.env.TG_API);
-bot.start((ctx) => ctx.reply("Xin chào, bạn có thể hỏi tôi bất cứ điều gì bằng cách dùng lệnh /hoi + <nội dung> hoặc /anh + <noi dung>"));
+bot.start((ctx) =>
+  ctx.reply(
+    "Xin chào, bạn có thể hỏi tôi bất cứ điều gì bằng cách dùng lệnh /hoi + <nội dung> hoặc /anh + <noi dung>",
+  ),
+);
 
 bot.help((ctx) => {
   ctx.reply(
-    "Tôi có thể đáp ứng các lệnh \n /anh -> để tạo ra ảnh từ text \n /hoi -> để trao đổi với tôi "
+    "Tôi có thể đáp ứng các lệnh \n /anh -> để tạo ra ảnh từ text \n /hoi -> để trao đổi với tôi ",
   );
 });
 
-
-
 // Image command
 bot.command("anh", async (ctx) => {
-  const text = ctx.message.text?.replace("/anh","")?.trim().toLowerCase();
+  const text = ctx.message.text?.replace("/anh", "")?.trim().toLowerCase();
 
   if (text) {
-   
     const res = await getImage(text);
 
     if (res) {
@@ -42,7 +43,7 @@ bot.command("anh", async (ctx) => {
       "Vui lòng điền nội dung sau /anh",
       {
         reply_to_message_id: ctx.message.message_id,
-      }
+      },
     );
   }
 });
@@ -71,14 +72,12 @@ bot.command("hoi", async (ctx) => {
         "Vui lòng hỏi bất kỳ điều gì sau /hoi",
         {
           reply_to_message_id: ctx.message.message_id,
-        }
+        },
       );
     } catch (error) {
       // ignore the error
     }
   }
 });
-
-
 
 bot.launch();
